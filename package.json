@@ -1,14 +1,15 @@
 {
-  "name": "visual-effects",
-  "version": "1.0.0",
+  "name": "@drewxiu/visual-effects",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --no-inline",
+    "publish": "npm publish . --access public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "drew.xiu@gmail.com",
+  "license": "MIT",
   "dependencies": {
     "noru-utils": "^0.2.14"
   },

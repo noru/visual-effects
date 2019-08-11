@@ -18,6 +18,7 @@ module.exports = {
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
       title: 'visual effects demo',
+      template: './src/demo.html',
     }),
   ],
 

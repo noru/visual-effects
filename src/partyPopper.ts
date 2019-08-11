@@ -15,13 +15,15 @@ interface Partical {
 }
 
 interface Config {
-  container: HTMLElement
-  particalAmount: number
+  container?: HTMLElement
+  particalAmount?: number
+  devicePixelRatio?: number
   speed?: number
   colors?: string[]
 }
 const defaultConfig: Required<Config> = {
   container: document.body,
+  devicePixelRatio: window.devicePixelRatio,
   particalAmount: 300,
   speed: 20,
   colors: ['#FB4A9B', '#F8CD4F', '#FC979D', '#A6DFEB', '#66B8C9', '#FAD7F3', '#FFE65B', '#DCF2F0'],
@@ -30,12 +32,11 @@ const defaultConfig: Required<Config> = {
 const TotalFrames = 250
 
 export function partyPopper(config: Config = defaultConfig) {
-  let { container, particalAmount, colors } = Object.assign({}, config, defaultConfig)
+  let { container, particalAmount, colors, devicePixelRatio } = Object.assign({}, defaultConfig, config)
   let canvas = document.createElement('canvas')
   let width = container.clientWidth || window.innerWidth
   let height = container.clientHeight || window.innerHeight
   let heightWidthRatio = height / width
-  let pixelRatio = window.devicePixelRatio
   canvas.id = 've-party-popper'
   canvas.width = width
   canvas.height = height
@@ -57,26 +58,26 @@ export function partyPopper(config: Config = defaultConfig) {
     particlesLeft[i] = {
       x: 0,
       y: canvas.height,
-      xOffset: random(-2, 2) * pixelRatio,
-      yOffset: random(-2, 0.5) * pixelRatio,
-      speed: random(8, 22) * pixelRatio,
+      xOffset: random(-2, 2) * devicePixelRatio,
+      yOffset: random(-2, 0.5) * devicePixelRatio,
+      speed: random(8, 22) * devicePixelRatio,
       opacity: 1,
       angle: 0,
       color: colors[randomInt(0, colors.length - 1)],
-      shape: getRandomShape(pixelRatio),
+      shape: getRandomShape(devicePixelRatio),
     }
   }
   for (let i = 0; i < particalAmount / 2; i++) {
     particlesRight[i] = {
       x: canvas.width,
       y: canvas.height,
-      xOffset: random(-2, 2) * pixelRatio,
-      yOffset: random(-2, 0.5) * pixelRatio,
-      speed: random(8, 22) * pixelRatio,
+      xOffset: random(-2, 2) * devicePixelRatio,
+      yOffset: random(-2, 0.5) * devicePixelRatio,
+      speed: random(8, 22) * devicePixelRatio,
       opacity: 1,
       angle: 0,
       color: colors[randomInt(0, colors.length - 1)],
-      shape: getRandomShape(pixelRatio),
+      shape: getRandomShape(devicePixelRatio),
     }
   }
 
@@ -95,7 +96,7 @@ export function partyPopper(config: Config = defaultConfig) {
       p.y -= (p.speed + p.yOffset) * heightWidthRatio
       p.speed *= Math.pow(0.99, count.frame) // exponentially decrease the speed
       if (p.speed < 0.1) {
-        fadeOut(p, pixelRatio)
+        fadeOut(p, devicePixelRatio)
       }
       paintSprite(ctx, p)
     })
@@ -108,7 +109,7 @@ export function partyPopper(config: Config = defaultConfig) {
       p.y -= (p.speed + p.yOffset) * heightWidthRatio
       p.speed *= Math.pow(0.99, count.frame) // exponentially decrease the speed
       if (p.speed < 0.01) {
-        fadeOut(p, pixelRatio)
+        fadeOut(p, devicePixelRatio)
       }
       paintSprite(ctx, p)
     })

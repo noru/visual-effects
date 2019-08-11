@@ -1,2 +1,2 @@
 import { partyPopper } from './partyPopper'
-partyPopper()()
+partyPopper({ devicePixelRatio: 1 })()
