@@ -37,7 +37,7 @@ module.exports = {
             options: { allowTsInNodeModules: true },
           },
         ],
-        include: [/node_modules\/noru-utils/, path.resolve(__dirname, 'src'), path.resolve(__dirname, 'demo')],
+        include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'demo'), /@drewxiu/],
       },
       {
         test: /\.(css|scss|sass)$/,

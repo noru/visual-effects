@@ -1,4 +1,4 @@
-import { sample } from 'noru-utils'
+import { sample } from '@drewxiu/utils'
 
 interface Config {
   container?: HTMLElement

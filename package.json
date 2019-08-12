@@ -11,7 +11,7 @@
   "author": "drew.xiu@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "noru-utils": "^0.2.15"
+    "@drewxiu/utils": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

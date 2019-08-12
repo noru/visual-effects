@@ -1,4 +1,4 @@
-import { random, randomBool, randomInt } from 'noru-utils'
+import { random, randomBool, randomInt } from '@drewxiu/utils'
 
 type Offset = [number, number]
 type Shape = [Offset, Offset, Offset?]
