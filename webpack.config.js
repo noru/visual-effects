@@ -7,20 +7,24 @@ let isDev = ENV !== 'production'
 
 module.exports = {
   mode: ENV || 'development',
-  entry: './src/demo.ts',
+  entry: './demo/index.tsx',
   devtool: isDev && 'source-map-cheap-eval',
   output: {
     filename: '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'),
   },
 
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
       title: 'visual effects demo',
-      template: './src/demo.html',
+      template: './demo/index.html',
     }),
   ],
+
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
 
   module: {
     rules: [
@@ -33,16 +37,17 @@ module.exports = {
             options: { allowTsInNodeModules: true },
           },
         ],
-        include: [/node_modules\/noru-utils/, path.resolve(__dirname, 'src')],
+        include: [/node_modules\/noru-utils/, path.resolve(__dirname, 'src'), path.resolve(__dirname, 'demo')],
+      },
+      {
+        test: /\.(css|scss|sass)$/,
+        exclude: [/node_modules/, path.resolve(__dirname, '../src/css/3rd.scss')],
+        use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
       },
     ],
   },
 
   devServer: {
     open: true,
-  },
-
-  resolve: {
-    extensions: ['.tsx', '.ts'],
   },
 }

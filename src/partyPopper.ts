@@ -32,12 +32,12 @@ const defaultConfig: Required<Config> = {
 const TotalFrames = 250
 
 export function partyPopper(config: Config = defaultConfig) {
-  let { container, particalAmount, colors, devicePixelRatio } = Object.assign({}, defaultConfig, config)
+  let { container, particalAmount, colors, devicePixelRatio, speed } = Object.assign({}, defaultConfig, config)
   let canvas = document.createElement('canvas')
   let width = container.clientWidth || window.innerWidth
   let height = container.clientHeight || window.innerHeight
   let heightWidthRatio = height / width
-  canvas.id = 've-party-popper'
+  canvas.id = 've-party-popper-' + Date.now()
   canvas.width = width
   canvas.height = height
   canvas.style.position = 'absolute'
@@ -60,7 +60,7 @@ export function partyPopper(config: Config = defaultConfig) {
       y: canvas.height,
       xOffset: random(-2, 2) * devicePixelRatio,
       yOffset: random(-2, 0.5) * devicePixelRatio,
-      speed: random(8, 22) * devicePixelRatio,
+      speed: (speed + random(-5, 5)) * devicePixelRatio,
       opacity: 1,
       angle: 0,
       color: colors[randomInt(0, colors.length - 1)],
@@ -73,7 +73,7 @@ export function partyPopper(config: Config = defaultConfig) {
       y: canvas.height,
       xOffset: random(-2, 2) * devicePixelRatio,
       yOffset: random(-2, 0.5) * devicePixelRatio,
-      speed: random(8, 22) * devicePixelRatio,
+      speed: (speed + random(-5, 5)) * devicePixelRatio,
       opacity: 1,
       angle: 0,
       color: colors[randomInt(0, colors.length - 1)],
@@ -115,6 +115,8 @@ export function partyPopper(config: Config = defaultConfig) {
     })
     if (updated) {
       requestAnimationFrame(() => render(count))
+    } else {
+      canvas.remove()
     }
   }
   container.appendChild(canvas)
