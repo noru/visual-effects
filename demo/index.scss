@@ -1,3 +1,12 @@
+@keyframes rainbow {
+  0%, 100% { color: #7ccdea; }
+  16%      { color: #0074D9; }
+  32%      { color: #2ECC40; }
+  48%      { color: #FFDC00; }
+  64%      { color: #B10DC9; }
+  80%      { color: #FF4136; }
+}
+
 body {
   background: #e3e3e3;
   font-family: Arial, Helvetica, sans-serif;
@@ -17,6 +26,10 @@ body {
     margin: auto;
     border-radius: 6px;
     margin-bottom: 1em;
+
+    &.effect-on {
+      animation: rainbow 3s infinite;
+    }
   }
   > * {
     display: block;
