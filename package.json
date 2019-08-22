@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --no-inline",
+    "start": "webpack-dev-server",
     "build-demo": "cross-env rimraf docs && NODE_ENV=production webpack --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

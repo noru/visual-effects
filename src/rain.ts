@@ -88,7 +88,6 @@ export class Rain {
   }
   start() {
     if (this.isRaining()) {
-      console.log(this.animationFrame)
       return
     }
     document.body.appendChild(this.canvas)
