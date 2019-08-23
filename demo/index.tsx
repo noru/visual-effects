@@ -4,6 +4,7 @@ import { partyPopper } from '../src/partyPopper'
 import { snowflake } from '../src/snowflake'
 import { explode } from '../src/explode'
 import { Rain } from '../src/rain'
+import { movingDots } from '../src/movingDots'
 import './index.scss'
 
 let rain = new Rain()
@@ -13,21 +14,22 @@ function onClick(evt) {
   explode({ x, y, radius: 200 })
 }
 function App() {
-  const [stopSnowflake, setStopSnowflake] = useState(null)
+  const [teardownSnowflake, setTeardownSnowflake] = useState(null)
   const [isRaining, setRaining] = useState(false)
   const [isExplosionOn, setExplosion] = useState(false)
+  const [teardownMovingDots, setTeardown] = useState(null)
 
   return (
     <div className="wrapper">
       <a onClick={() => partyPopper({ devicePixelRatio: 1, speed: (window.innerWidth / 400) * 20 })()}>Party Popper</a>
       <a
-        className={stopSnowflake && 'effect-on'}
+        className={teardownSnowflake && 'effect-on'}
         onClick={() => {
-          if (stopSnowflake) {
-            stopSnowflake()
-            setStopSnowflake(null)
+          if (teardownSnowflake) {
+            teardownSnowflake()
+            setTeardownSnowflake(null)
           } else {
-            setStopSnowflake(() => snowflake({ size: 48 }))
+            setTeardownSnowflake(() => snowflake({ size: 48 }))
           }
         }}
       >
@@ -58,6 +60,19 @@ function App() {
         }}
       >
         Explode
+      </a>
+      <a
+        className={teardownMovingDots && 'effect-on'}
+        onClick={() => {
+          if (teardownMovingDots) {
+            teardownMovingDots()
+            setTeardown(null)
+          } else {
+            setTeardown(() => movingDots({ amount: 800, mouseEffect: true }))
+          }
+        }}
+      >
+        Moving Dots
       </a>
     </div>
   )

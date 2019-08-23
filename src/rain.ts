@@ -1,3 +1,5 @@
+import { Sprites } from './utils/common'
+
 interface Config {
   sprites?: string[]
   size?: number | string
@@ -5,7 +7,7 @@ interface Config {
 }
 
 const defaultConfig: Readonly<Required<Config>> = {
-  sprites: ['💲', '💵', '💱', '💸', '💰', '💴', '💷', '💶'],
+  sprites: Sprites,
   size: '1em',
   amount: 250,
 }

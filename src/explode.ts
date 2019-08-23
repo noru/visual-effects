@@ -1,4 +1,5 @@
 import { randomInt, random } from '@drewxiu/utils'
+import { Sprites } from './utils/common'
 
 interface Config {
   x: number
@@ -9,7 +10,7 @@ interface Config {
 }
 
 const defaultConfig: Readonly<Required<Omit<Config, 'x' | 'y'>>> = {
-  sprites: ['💲', '💵', '💱', '💸', '💰', '💴', '💷', '💶'],
+  sprites: Sprites,
   radius: 100,
   amount: 100,
 }

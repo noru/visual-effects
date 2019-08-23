@@ -1,4 +1,5 @@
 import { random, randomBool, randomInt } from '@drewxiu/utils'
+import { Colors } from './utils/common'
 
 type Offset = [number, number]
 type Shape = [Offset, Offset, Offset?]
@@ -26,7 +27,7 @@ const defaultConfig: Required<Config> = {
   devicePixelRatio: window.devicePixelRatio,
   particalAmount: 300,
   speed: 20,
-  colors: ['#FB4A9B', '#F8CD4F', '#FC979D', '#A6DFEB', '#66B8C9', '#FAD7F3', '#FFE65B', '#DCF2F0'],
+  colors: Colors,
 }
 
 const TotalFrames = 250
