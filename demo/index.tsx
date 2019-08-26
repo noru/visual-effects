@@ -1,80 +1,101 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
+import { Func } from '@drewxiu/utils'
 import { partyPopper } from '../src/partyPopper'
 import { snowflake } from '../src/snowflake'
 import { explode } from '../src/explode'
 import { Rain } from '../src/rain'
 import { movingDots } from '../src/movingDots'
+import { movingDots as movingDotsWC } from '../src/movingDotsCollision'
 import './index.scss'
 
-let rain = new Rain()
-function onClick(evt) {
+interface Effect<T = any> {
+  name: string
+  context?: T
+  onStart: (context: T) => Func | undefined | null | void
+  onStop?: (context: T) => void
+  oneTime?: boolean
+}
+
+function onExplosionClick(evt) {
   let x = evt.pageX
   let y = evt.pageY
   explode({ x, y, radius: 200 })
 }
 function App() {
-  const [teardownSnowflake, setTeardownSnowflake] = useState(null)
-  const [isRaining, setRaining] = useState(false)
-  const [isExplosionOn, setExplosion] = useState(false)
-  const [teardownMovingDots, setTeardown] = useState(null)
+  const Effects: Effect[] = [
+    {
+      name: 'Party Popper',
+      onStart: () => partyPopper({ devicePixelRatio: 1, speed: (window.innerWidth / 400) * 20 })(),
+      oneTime: true,
+    },
+    {
+      name: 'Snowflakes',
+      onStart: () => snowflake({ size: 48 }),
+    },
+    {
+      name: 'Rain',
+      context: new Rain(),
+      onStart: rain => rain.start(),
+      onStop: rain => rain.stop(),
+    },
+    {
+      name: 'Explosion',
+      context: onExplosionClick,
+      onStart: onClick => {
+        window.addEventListener('click', onClick)
+      },
+      onStop: onClick => {
+        window.removeEventListener('click', onClick)
+      },
+    },
+    {
+      name: 'Moving Dots',
+      onStart: () => movingDots({ amount: 800, mouseEffect: true }),
+    },
+    {
+      name: 'Moving Dots w/ Collision',
+      onStart: () => movingDotsWC({ amount: 80, mouseEffect: true }),
+    },
+  ]
 
   return (
     <div className="wrapper">
-      <a onClick={() => partyPopper({ devicePixelRatio: 1, speed: (window.innerWidth / 400) * 20 })()}>Party Popper</a>
-      <a
-        className={teardownSnowflake && 'effect-on'}
-        onClick={() => {
-          if (teardownSnowflake) {
-            teardownSnowflake()
-            setTeardownSnowflake(null)
-          } else {
-            setTeardownSnowflake(() => snowflake({ size: 48 }))
-          }
-        }}
-      >
-        Snow Flake
-      </a>
-      <a
-        className={isRaining && 'effect-on'}
-        onClick={() => {
-          if (isRaining) {
-            rain.stop()
-          } else {
-            rain.start()
-          }
-          setRaining(!isRaining)
-        }}
-      >
-        Rain
-      </a>
-      <a
-        className={isExplosionOn && 'effect-on'}
-        onClick={() => {
-          if (!isExplosionOn) {
-            window.addEventListener('click', onClick)
-          } else {
-            window.removeEventListener('click', onClick)
-          }
-          setExplosion(!isExplosionOn)
-        }}
-      >
-        Explode
-      </a>
-      <a
-        className={teardownMovingDots && 'effect-on'}
-        onClick={() => {
-          if (teardownMovingDots) {
-            teardownMovingDots()
-            setTeardown(null)
-          } else {
-            setTeardown(() => movingDots({ amount: 800, mouseEffect: true }))
-          }
-        }}
-      >
-        Moving Dots
-      </a>
+      {Effects.map(e => (
+        <Button
+          key={e.name}
+          name={e.name}
+          context={e.context}
+          onStart={e.onStart}
+          onStop={e.onStop}
+          oneTime={e.oneTime}
+        />
+      ))}
     </div>
+  )
+}
+
+function Button(props: Effect & { key: string }) {
+  let { name, onStart, onStop, context, oneTime } = props
+  let [on, setOn] = useState(false)
+  let [teardown, setTeardown] = useState(null)
+  return (
+    <a
+      className={on && !oneTime ? 'effect-on' : ''}
+      onClick={() => {
+        document.querySelectorAll('a.effect-on').forEach((n: any) => n.click())
+        if (!on || oneTime) {
+          setTeardown(() => onStart(context))
+          !oneTime && setOn(true)
+        } else {
+          typeof teardown === 'function' && teardown(context)
+          typeof onStop === 'function' && onStop(context)
+          setOn(false)
+        }
+      }}
+    >
+      {name}
+    </a>
   )
 }
 

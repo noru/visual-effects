@@ -98,7 +98,7 @@ export function movingDots({
     mousePos.y = evt.offsetY * ratio
   }
   if (mouseEffect) {
-    mousePos = { x: 0, y: 0 }
+    mousePos = { x: -1000, y: -1000 }
     canvas.addEventListener('mousemove', recordMousePos)
   }
 
