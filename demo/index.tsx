@@ -55,7 +55,7 @@ function App() {
     },
     {
       name: 'Moving Dots w/ Collision',
-      onStart: () => movingDotsWC({ amount: 80, mouseEffect: true }),
+      onStart: () => movingDotsWC({ amount: 100, mouseEffect: true }),
     },
   ]
 

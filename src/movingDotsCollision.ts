@@ -1,14 +1,15 @@
-import { sample, random, randomInt } from '@drewxiu/utils'
+import { sample, random } from '@drewxiu/utils'
 import { Colors } from './utils/common'
 import { rotate2D, Vector2D } from './utils/math'
 
 interface Partical {
   x: number
   y: number
-  v: { x: number; y: number }
+  v: Vector2D
   color: string
   radius: number
   mass: number
+  updated?: boolean
 }
 
 interface Config {
@@ -39,12 +40,12 @@ export function movingDots({ container = document.body, amount = 100, colors = C
 
   let particles = new Array<Partical>(amount)
   for (let i = 0; i < amount; i++) {
-    let radius = random(15, 20) * ratio
+    let radius = random(20, 30) * ratio
     let x, y
     do {
       x = random(radius, width * ratio - radius)
       y = random(radius, height * ratio - radius)
-    } while (particles.some(p => Math.hypot(x - p.x, y - p.y) < radius + p.radius))
+    } while (particles.some(p => Math.hypot(x - p.x, y - p.y) < (radius + p.radius)))
     particles[i] = {
       x,
       y,
@@ -54,7 +55,7 @@ export function movingDots({ container = document.body, amount = 100, colors = C
       },
       color: sample(colors),
       radius,
-      mass: 1, // radius * radius,
+      mass: radius * radius,
     }
   }
 
@@ -76,12 +77,12 @@ export function movingDots({ container = document.body, amount = 100, colors = C
         // other particles
         resolveCollision(p, particles)
       }
-    })
 
-    particles.forEach(p => {
       p.x += p.v.x
       p.y += p.v.y
+      p.updated = false
     })
+
     // next frame
     frameId = requestAnimationFrame(render)
   }
@@ -94,7 +95,10 @@ export function movingDots({ container = document.body, amount = 100, colors = C
   }
 }
 
-function resolveCollision(p: Partical, others: Partical[]): Vector2D | undefined {
+function resolveCollision(p: Partical, others: Partical[]) {
+  if (p.updated) {
+    return
+  }
   for (let i = 0; i < others.length; i++) {
     let other = others[i]
     if (other === p || !isCollided(p, other)) continue
@@ -103,24 +107,25 @@ function resolveCollision(p: Partical, others: Partical[]): Vector2D | undefined
     let vyDiff = p.v.y - other.v.y
     let xDist = other.x - p.x
     let yDist = other.y - p.y
+    if (vxDiff * xDist + vyDiff * yDist < 0) {
+      return
+    }
 
-    let angle = Math.atan2(other.y - p.y, other.x - p.x)
+    let angle = -Math.atan2(other.y - p.y, other.x - p.x)
     rotate2D(p.v, angle)
     rotate2D(other.v, angle)
     let totalMass = p.mass + other.mass
-    if (vxDiff * xDist + vyDiff * yDist < 0) {
-      p.v.y = 2
-      other.v.y = -2
-    } else {
-      p.v.x = ((p.mass - other.mass) * p.v.x) / totalMass + (other.mass * 2 * other.v.x) / totalMass
-      other.v.x = ((p.mass - other.mass) * other.v.x) / totalMass + (other.mass * 2 * p.v.x) / totalMass
-    }
+    let px = ((p.mass - other.mass) * p.v.x) / totalMass + (other.mass * 2 * other.v.x) / totalMass
+    let ox = ((p.mass - other.mass) * other.v.x) / totalMass + (other.mass * 2 * p.v.x) / totalMass
+    p.v.x = px * 0.98
+    other.v.x = ox * 0.98
+
     rotate2D(p.v, -angle)
     rotate2D(other.v, -angle)
+    p.updated = other.updated = true
   }
-  return p.v
 }
 
 function isCollided(p1: Partical, p2: Partical) {
-  return Math.hypot(p1.x - p2.x, p1.y - p2.y) < p1.radius + p2.radius
+  return Math.hypot(p1.x - p2.x, p1.y - p2.y) <= (p1.radius + p2.radius)
 }
