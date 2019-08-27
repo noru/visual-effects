@@ -1,6 +1,5 @@
-import { sample, random } from '@drewxiu/utils'
+import { sample, random, rotate2D, Vector2D, TAU } from '@drewxiu/utils'
 import { Colors } from './utils/common'
-import { rotate2D, Vector2D } from './utils/math'
 
 interface Partical {
   x: number
@@ -18,12 +17,7 @@ interface Config {
   colors?: string[]
   width?: number
   height?: number
-  mouseEffect?: boolean
-  mouseEffectRange?: number
-  mouseEffectMaxRadius?: number
 }
-
-const PHI = Math.PI * 2
 
 export function movingDots({ container = document.body, amount = 100, colors = Colors, width, height }: Config = {}) {
   let frameId
@@ -45,7 +39,7 @@ export function movingDots({ container = document.body, amount = 100, colors = C
     do {
       x = random(radius, width * ratio - radius)
       y = random(radius, height * ratio - radius)
-    } while (particles.some(p => Math.hypot(x - p.x, y - p.y) < (radius + p.radius)))
+    } while (particles.some(p => Math.hypot(x - p.x, y - p.y) < radius + p.radius))
     particles[i] = {
       x,
       y,
@@ -64,20 +58,19 @@ export function movingDots({ container = document.body, amount = 100, colors = C
     particles.forEach(p => {
       // paint
       context.beginPath()
-      context.arc(p.x, p.y, p.radius, 0, PHI)
+      context.arc(p.x, p.y, p.radius, 0, TAU)
       context.fillStyle = p.color
       context.fill()
       // resolve collision
       // edges
       if (p.x + p.radius > canvas.width || p.x - p.radius < 0) {
-        p.v.x *= -1
+        p.v.x *= random(-0.95, -1.03)
       } else if (p.y + p.radius > canvas.height || p.y - p.radius < 0) {
-        p.v.y *= -1
+        p.v.y *= random(-0.95, -1.03)
       } else {
         // other particles
         resolveCollision(p, particles)
       }
-
       p.x += p.v.x
       p.y += p.v.y
       p.updated = false
@@ -89,6 +82,7 @@ export function movingDots({ container = document.body, amount = 100, colors = C
 
   container.append(canvas)
   render()
+  console.info('[Moving Dots w/ Collision]Inspired by <chriscourses.com>(https://www.youtube.com/watch?v=789weryntzM)')
   return () => {
     cancelAnimationFrame(frameId)
     canvas.remove()
@@ -112,20 +106,21 @@ function resolveCollision(p: Partical, others: Partical[]) {
     }
 
     let angle = -Math.atan2(other.y - p.y, other.x - p.x)
-    rotate2D(p.v, angle)
-    rotate2D(other.v, angle)
+    p.v = rotate2D(p.v, angle)
+    other.v = rotate2D(other.v, angle)
     let totalMass = p.mass + other.mass
     let px = ((p.mass - other.mass) * p.v.x) / totalMass + (other.mass * 2 * other.v.x) / totalMass
     let ox = ((p.mass - other.mass) * other.v.x) / totalMass + (other.mass * 2 * p.v.x) / totalMass
-    p.v.x = px * 0.98
+
+    p.v.x = px * 0.98 // add a bit damping, to avoid acceleration issue
     other.v.x = ox * 0.98
 
-    rotate2D(p.v, -angle)
-    rotate2D(other.v, -angle)
+    p.v = rotate2D(p.v, -angle)
+    other.v = rotate2D(other.v, -angle)
     p.updated = other.updated = true
   }
 }
 
 function isCollided(p1: Partical, p2: Partical) {
-  return Math.hypot(p1.x - p2.x, p1.y - p2.y) <= (p1.radius + p2.radius)
+  return Math.hypot(p1.x - p2.x, p1.y - p2.y) <= p1.radius + p2.radius
 }

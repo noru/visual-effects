@@ -104,6 +104,8 @@ export function movingDots({
 
   container.append(canvas)
   render()
+  console.info('[Moving Dots]Inspired by <chriscourses.com>')
+
   return () => {
     cancelAnimationFrame(frameId)
     canvas.removeEventListener('mousemove', recordMousePos)
