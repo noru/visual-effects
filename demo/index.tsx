@@ -7,6 +7,7 @@ import { explode } from '../src/explode'
 import { Rain } from '../src/rain'
 import { movingDots } from '../src/movingDots'
 import { movingDots as movingDotsWC } from '../src/movingDotsCollision'
+import { circleMovement } from '../src/circleMovement'
 import './index.scss'
 
 interface Effect<T = any> {
@@ -56,6 +57,10 @@ function App() {
     {
       name: 'Moving Dots w/ Collision',
       onStart: () => movingDotsWC({ amount: (window.innerWidth / 10) | 0 }),
+    },
+    {
+      name: 'Circle Movement',
+      onStart: () => circleMovement(),
     },
   ]
 

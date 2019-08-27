@@ -1,4 +1,4 @@
-import { sample, random } from '@drewxiu/utils'
+import { sample, random, TAU } from '@drewxiu/utils'
 import { Colors } from './utils/common'
 
 interface Partical {
@@ -21,8 +21,6 @@ interface Config {
   mouseEffectRange?: number
   mouseEffectMaxRadius?: number
 }
-
-const PHI = Math.PI * 2
 
 export function movingDots({
   container = document.body,
@@ -49,10 +47,10 @@ export function movingDots({
   canvas.style.width = width + 'px'
   canvas.style.height = height + 'px'
 
-  let particals = new Array<Partical>(amount)
+  let particles = new Array<Partical>(amount)
   for (let i = 0; i < amount; i++) {
     let radius = random(5, 10) * ratio
-    particals[i] = {
+    particles[i] = {
       x: random(width * ratio),
       y: random(height * ratio),
       vx: random(-3, 3) * ratio,
@@ -65,10 +63,10 @@ export function movingDots({
 
   function render() {
     context.clearRect(0, 0, canvas.width, canvas.height)
-    particals.forEach(p => {
+    particles.forEach(p => {
       // paint
       context.beginPath()
-      context.arc(p.x, p.y, p.radius, 0, PHI)
+      context.arc(p.x, p.y, p.radius, 0, TAU)
       context.fillStyle = p.color
       context.fill()
       // move
