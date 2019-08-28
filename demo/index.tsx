@@ -8,6 +8,7 @@ import { Rain } from '../src/rain'
 import { movingDots } from '../src/movingDots'
 import { movingDots as movingDotsWC } from '../src/movingDotsCollision'
 import { circleMovement } from '../src/circleMovement'
+import { fireworks } from '../src/fireworks'
 import './index.scss'
 
 interface Effect<T = any> {
@@ -23,6 +24,7 @@ function onExplosionClick(evt) {
   let y = evt.pageY
   explode({ x, y, radius: 200 })
 }
+
 function App() {
   const Effects: Effect[] = [
     {
@@ -61,6 +63,10 @@ function App() {
     {
       name: 'Circle Movement',
       onStart: () => circleMovement(),
+    },
+    {
+      name: 'Fireworks',
+      onStart: () => fireworks(),
     },
   ]
 
