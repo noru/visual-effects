@@ -68,6 +68,9 @@ export function circleMovement({
   canvas.style.width = width + 'px'
   canvas.style.height = height + 'px'
 
+  context.fillStyle = '#FAFAFA'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
   let particles = new Array<Particle>(amount)
 
   for (let i = 0; i < amount; i++) {

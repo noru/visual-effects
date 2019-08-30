@@ -42,7 +42,7 @@ class Shot {
   }
 
   next() {
-    if (this.height < this.explodeHeight ) {
+    if (this.height < this.explodeHeight) {
       this.height += this.initSpeed *= 0.96
       this.x = (this.driftedX - this.x) * 0.035 + this.x
     } else {
@@ -97,7 +97,7 @@ class Shot {
     this.distanceFromCameraFactor = random(0.3, 1)
     this.explodeHeight = this.distanceFromCameraFactor * 0.9 * this.context.canvas.height
     this.x = random(canvas.width * 0.1, canvas.width * 0.9)
-    this.driftedX = random(-2, 2) * canvas.width / 30 + this.x
+    this.driftedX = (random(-2, 2) * canvas.width) / 30 + this.x
     this.color = sample(Colors)
     this.radius = this.explodeHeight * 0.3
     this.initSpeed = this.explodeHeight * 0.05
@@ -106,7 +106,7 @@ class Shot {
       y: canvas.height - this.explodeHeight,
       yV: 0,
       rotation: randomInt(0, 360),
-      speed: random(.03, .06) * this.radius,
+      speed: random(0.03, 0.06) * this.radius,
       opacity: this.distanceFromCameraFactor,
       opacityStep: 0.01 * this.distanceFromCameraFactor,
     }))
@@ -132,7 +132,7 @@ export function fireworks({ container = document.body, width, height }: Config =
   canvas.style.width = width + 'px'
   canvas.style.height = height + 'px'
 
-  context.fillStyle = 'black'
+  context.fillStyle = '#999'
   context.fillRect(0, 0, canvas.width, canvas.height)
 
   let shots = new Array<Shot>()
