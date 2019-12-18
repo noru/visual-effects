@@ -9,6 +9,7 @@ import { movingDots } from '../src/movingDots'
 import { movingDots as movingDotsWC } from '../src/movingDotsCollision'
 import { circleMovement } from '../src/circleMovement'
 import { fireworks } from '../src/fireworks'
+import { globe } from '../src/globe'
 import './index.scss'
 
 interface Effect<T = any> {
@@ -67,6 +68,10 @@ function App() {
     {
       name: 'Fireworks',
       onStart: () => fireworks(),
+    },
+    {
+      name: 'Sim 3D Globe',
+      onStart: () => globe(),
     },
   ]
 
