@@ -10,6 +10,7 @@ import { movingDots as movingDotsWC } from '../src/movingDotsCollision'
 import { circleMovement } from '../src/circleMovement'
 import { fireworks } from '../src/fireworks'
 import { globe } from '../src/globe'
+import { inOutDetection } from '../src/inOutDetection'
 import './index.scss'
 
 interface Effect<T = any> {
@@ -40,16 +41,16 @@ function App() {
     {
       name: 'Rain',
       context: new Rain(),
-      onStart: rain => rain.start(),
-      onStop: rain => rain.stop(),
+      onStart: (rain) => rain.start(),
+      onStop: (rain) => rain.stop(),
     },
     {
       name: 'Explosion',
       context: onExplosionClick,
-      onStart: onClick => {
+      onStart: (onClick) => {
         window.addEventListener('click', onClick)
       },
-      onStop: onClick => {
+      onStop: (onClick) => {
         window.removeEventListener('click', onClick)
       },
     },
@@ -73,11 +74,15 @@ function App() {
       name: 'Sim 3D Globe',
       onStart: () => globe(),
     },
+    {
+      name: 'In/Out Detection',
+      onStart: () => inOutDetection(),
+    },
   ]
 
   return (
     <div className="wrapper">
-      {Effects.map(e => (
+      {Effects.map((e) => (
         <Button
           key={e.name}
           name={e.name}
