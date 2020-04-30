@@ -3,7 +3,7 @@ import { Colors } from './utils/common'
 
 type Offset = [number, number]
 type Shape = [Offset, Offset, Offset?]
-interface Partical {
+interface Particle {
   x: number
   y: number
   xOffset: number
@@ -17,7 +17,7 @@ interface Partical {
 
 interface Config {
   container?: HTMLElement
-  particalAmount?: number
+  particleAmount?: number
   devicePixelRatio?: number
   speed?: number
   colors?: string[]
@@ -25,7 +25,7 @@ interface Config {
 const defaultConfig: Required<Config> = {
   container: document.body,
   devicePixelRatio: window.devicePixelRatio,
-  particalAmount: 300,
+  particleAmount: 300,
   speed: 20,
   colors: Colors,
 }
@@ -33,7 +33,7 @@ const defaultConfig: Required<Config> = {
 const TotalFrames = 250
 
 export function partyPopper(config: Config = defaultConfig) {
-  let { container, particalAmount, colors, devicePixelRatio, speed } = Object.assign({}, defaultConfig, config)
+  let { container, particleAmount: particleAmount, colors, devicePixelRatio, speed } = Object.assign({}, defaultConfig, config)
   let canvas = document.createElement('canvas')
   let width = container.clientWidth || window.innerWidth
   let height = container.clientHeight || window.innerHeight
@@ -52,10 +52,10 @@ export function partyPopper(config: Config = defaultConfig) {
   canvas.style.zIndex = '100'
 
   let ctx = canvas.getContext('2d')!
-  let particlesLeft: Partical[] = new Array(particalAmount / 2)
-  let particlesRight: Partical[] = new Array(particalAmount / 2)
+  let particlesLeft: Particle[] = new Array(particleAmount / 2)
+  let particlesRight: Particle[] = new Array(particleAmount / 2)
 
-  for (let i = 0; i < particalAmount / 2; i++) {
+  for (let i = 0; i < particleAmount / 2; i++) {
     particlesLeft[i] = {
       x: 0,
       y: canvas.height,
@@ -68,7 +68,7 @@ export function partyPopper(config: Config = defaultConfig) {
       shape: getRandomShape(devicePixelRatio),
     }
   }
-  for (let i = 0; i < particalAmount / 2; i++) {
+  for (let i = 0; i < particleAmount / 2; i++) {
     particlesRight[i] = {
       x: canvas.width,
       y: canvas.height,
@@ -124,7 +124,7 @@ export function partyPopper(config: Config = defaultConfig) {
   return render
 }
 
-function fadeOut(p: Partical, ratio: number = 1) {
+function fadeOut(p: Particle, ratio: number = 1) {
   p.opacity -= 0.005
   p.x += random(0, 1)
   p.y += random(0, 1) * ratio
@@ -139,7 +139,7 @@ function getRandomShape(ratio: number = 1): Shape {
   ]
 }
 
-function paintSprite(ctx, p: Partical) {
+function paintSprite(ctx, p: Particle) {
   if (p.opacity < 0 || p.y > ctx.width || p.x < 0 || p.y > ctx.width) {
     return
   }

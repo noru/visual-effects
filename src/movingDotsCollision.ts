@@ -1,7 +1,7 @@
 import { sample, random, rotate2D, Vector2D, TAU } from '@drewxiu/utils'
 import { Colors } from './utils/common'
 
-interface Partical {
+interface Particle {
   x: number
   y: number
   v: Vector2D
@@ -32,7 +32,7 @@ export function movingDots({ container = document.body, amount = 100, colors = C
   canvas.style.width = width + 'px'
   canvas.style.height = height + 'px'
 
-  let particles = new Array<Partical>(amount)
+  let particles = new Array<Particle>(amount)
   for (let i = 0; i < amount; i++) {
     let radius = random(20, 30) * ratio
     let x, y
@@ -89,7 +89,7 @@ export function movingDots({ container = document.body, amount = 100, colors = C
   }
 }
 
-function resolveCollision(p: Partical, others: Partical[]) {
+function resolveCollision(p: Particle, others: Particle[]) {
   if (p.updated) {
     return
   }
@@ -121,6 +121,6 @@ function resolveCollision(p: Partical, others: Partical[]) {
   }
 }
 
-function isCollided(p1: Partical, p2: Partical) {
+function isCollided(p1: Particle, p2: Particle) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y) <= p1.radius + p2.radius
 }

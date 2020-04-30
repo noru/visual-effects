@@ -1,7 +1,7 @@
 import { sample, random, TAU } from '@drewxiu/utils'
 import { Colors } from './utils/common'
 
-interface Partical {
+interface Particle {
   x: number
   y: number
   vx: number
@@ -47,7 +47,7 @@ export function movingDots({
   canvas.style.width = width + 'px'
   canvas.style.height = height + 'px'
 
-  let particles = new Array<Partical>(amount)
+  let particles = new Array<Particle>(amount)
   for (let i = 0; i < amount; i++) {
     let radius = random(5, 10) * ratio
     particles[i] = {
